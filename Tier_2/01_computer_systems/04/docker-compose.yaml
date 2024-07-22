@@ -1,0 +1,16 @@
+services:
+  web_app:
+    build: .  # Dockerfile is in the same folder with .yaml
+    ports:
+      - "80:8000" # host port : docker port
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: rest_app
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: 567234
