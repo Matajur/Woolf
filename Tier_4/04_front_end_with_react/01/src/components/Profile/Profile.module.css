@@ -1,0 +1,15 @@
+.userCard {
+  border: 1px solid black;
+  border-radius: 5%;
+}
+
+.statsList {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+.statsItem {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,23 @@
+.footer {
+    padding: 12px 0;
+    border-top: solid 1px;
+  }
+  .footerDesc {
+    text-align: center;
+  }
+  .footerLink {
+    text-decoration: none;
+    position: relative;
+  }
+  .footerLink::before {
+    content: '';
+    position: absolute;
+    bottom: 6%;
+    left: 50%;
+    transform: translateX(-50%) skewX(-12deg);
+    z-index: -1;
+    width: 110%;
+    height: 24%;
+    background-color: var(--color-blue);
+    transition: 200ms ease;
+  }

@@ -1,0 +1,14 @@
+:root {
+  /*colors*/
+  --color-black: #1a1a1a;
+  --color-blue: #646cff;
+  --color-dark: #242424;
+  --color-dark-blue: #213547;
+  --color-soft-white: #f9f9f9;
+  --color-white: #ffffff;
+  --color-white-transparent: rgba(255, 255, 255, 0.87);
+
+  /*font*/
+  --font-regular: 400;
+  --font-bold: 500;
+}

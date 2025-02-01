@@ -1,0 +1,81 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema hw_02
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema hw_02
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `hw_02` DEFAULT CHARACTER SET utf8 ;
+USE `hw_02` ;
+
+-- -----------------------------------------------------
+-- Table `hw_02`.`clients`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hw_02`.`clients` (
+  `client_id` INT NOT NULL AUTO_INCREMENT,
+  `full_name` VARCHAR(45) NOT NULL,
+  `address` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`client_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hw_02`.`orders`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hw_02`.`orders` (
+  `order_number` INT NOT NULL AUTO_INCREMENT,
+  `order_date` DATETIME NOT NULL,
+  `client_id` INT NOT NULL,
+  PRIMARY KEY (`order_number`),
+  INDEX `client_idx` (`client_id` ASC) VISIBLE,
+  CONSTRAINT `client`
+    FOREIGN KEY (`client_id`)
+    REFERENCES `hw_02`.`clients` (`client_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hw_02`.`products`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hw_02`.`products` (
+  `product_id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`product_id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hw_02`.`order_items`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hw_02`.`order_items` (
+  `order_number` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `quantity` INT NOT NULL DEFAULT 1,
+  PRIMARY KEY (`order_number`, `product_id`),
+  INDEX `order_idx` (`order_number` ASC) VISIBLE,
+  INDEX `product_idx` (`product_id` ASC) VISIBLE,
+  CONSTRAINT `order`
+    FOREIGN KEY (`order_number`)
+    REFERENCES `hw_02`.`orders` (`order_number`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `product`
+    FOREIGN KEY (`product_id`)
+    REFERENCES `hw_02`.`products` (`product_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

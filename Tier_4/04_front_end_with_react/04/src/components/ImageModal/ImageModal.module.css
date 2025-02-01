@@ -1,0 +1,19 @@
+.imageWrapper {
+  position: relative;
+}
+
+.modalImage {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+}
+
+.modalButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-white);
+  font-size: 48px;
+}

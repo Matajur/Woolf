@@ -1,0 +1,10 @@
+.friendsList {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+.friendCard {
+  border: 1px solid black;
+  border-radius: 5%;
+}

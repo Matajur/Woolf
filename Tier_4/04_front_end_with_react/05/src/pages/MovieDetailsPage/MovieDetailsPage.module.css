@@ -1,0 +1,15 @@
+.movieWrapper {
+  display: flex;
+  margin: 24px 0px;
+}
+
+.posterImg {
+  margin-right: 24px;
+}
+
+.movieDescription {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

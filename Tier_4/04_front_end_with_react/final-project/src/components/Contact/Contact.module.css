@@ -1,0 +1,17 @@
+.contactWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contacName {
+  margin-bottom: 8px;
+}
+
+.userIcon {
+    margin-right: 8px;
+}
+
+.phoneIcon {
+    margin-right: 8px;
+}

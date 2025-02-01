@@ -1,0 +1,17 @@
+.loginFormWrapper {
+    max-width: 300px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+    gap: 8px;
+  }
+  
+  .inputField {
+    width: 100%;
+  }
+  
+  .submitButton {
+    margin-left: auto;
+    margin-right: auto;
+  }

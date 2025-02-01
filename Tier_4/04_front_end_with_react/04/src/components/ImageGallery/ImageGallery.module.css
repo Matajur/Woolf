@@ -1,0 +1,11 @@
+.imageList {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.imagetCard {
+  width: 150px;
+}

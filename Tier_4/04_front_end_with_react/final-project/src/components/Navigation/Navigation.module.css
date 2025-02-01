@@ -1,0 +1,18 @@
+.navList {
+  list-style: none;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.navList li a {
+  text-decoration: none;
+}
+
+.navList li:hover {
+  text-decoration: underline;
+}
+
+.navList li a.isActive {
+  color: var(--color-blue);
+}

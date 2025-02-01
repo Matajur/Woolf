@@ -1,0 +1,28 @@
+.editForm {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: flex-start;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.input {
+    display: block;
+    width: 100%;
+}
+
+.modalTitle {
+    text-align: center;
+}
+
+.confirmButton,
+.cancelButton {
+  flex: 1;
+  margin: 0 10px;
+}

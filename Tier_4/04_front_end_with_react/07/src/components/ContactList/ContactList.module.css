@@ -1,0 +1,21 @@
+.contactList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.contactCard {
+  border: 1px solid black;
+  border-radius: 8px;
+  min-width: 300px;
+  padding: 8px;
+}
+
+@media only screen and (min-width: 768px) {
+  .contactList {
+    flex-direction: row;
+  }
+}
