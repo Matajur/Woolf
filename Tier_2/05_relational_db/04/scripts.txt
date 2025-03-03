@@ -1,0 +1,232 @@
+-- 1. Create the new DB
+-- a. Create the Schema "LibraryManagement"
+
+CREATE SCHEMA LibraryManagement;
+USE LibraryManagement;
+
+-- b. Create the "authors" table
+
+CREATE TABLE authors (
+    author_id INT AUTO_INCREMENT PRIMARY KEY,
+    author_name VARCHAR(255) NOT NULL
+);
+
+-- c. Create the "genres" table
+
+CREATE TABLE genres (
+    genre_id INT AUTO_INCREMENT PRIMARY KEY,
+    genre_name VARCHAR(255) NOT NULL
+);
+
+-- d. Create the "books" table
+
+CREATE TABLE books (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    publication_year YEAR NOT NULL,
+    author_id INT,
+    genre_id INT,
+    FOREIGN KEY (author_id) REFERENCES authors(author_id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id) ON DELETE CASCADE
+);
+
+-- e. Create the "users" table
+
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+-- f. Create the "borrowed_books" table
+
+CREATE TABLE borrowed_books (
+    borrow_id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT,
+    user_id INT,
+    borrow_date DATE NOT NULL,
+    return_date DATE,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- 2. Insert Sample Data
+-- a. The "authors" table
+
+INSERT INTO authors (author_name) VALUES 
+('J.R.R. Tolkien'), 
+('George Orwell');
+
+-- b. The "genres" table
+
+INSERT INTO genres (genre_name) VALUES 
+('Fantasy'), 
+('Dystopian');
+
+-- c. The "books" table
+
+INSERT INTO books (title, publication_year, author_id, genre_id) VALUES 
+('The Lord of the Rings', 1954, 1, 1), 
+('Animal Farm', 1945, 2, 2);
+
+-- d. The "users" table
+
+INSERT INTO users (username, email) VALUES 
+('princess_of_wales', 'princess@test.com'),
+('mick_jagger', 'mick.jagger@test.com');
+
+-- e. The "borrowed_books" table
+
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date) VALUES 
+(1, 1, '1996-07-01', '1997-07-01'), 
+(2, 2, '1990-07-26', NULL);
+
+-- f. Data verification
+
+SELECT * FROM authors;
+SELECT * FROM genres;
+SELECT * FROM books;
+SELECT * FROM users;
+SELECT * FROM borrowed_books;
+
+-- 3. Join all data tables from the previous topic
+
+USE hw_03;
+
+SELECT 
+    o.id AS order_id,
+    p.name AS product_name,
+    od.quantity,
+    p.unit,
+    p.price,
+    o.date,
+    ca.name AS category,
+    ca.description,
+    su.name AS supplier,
+    su.contact AS sup_contact,
+    su.address AS sup_address,
+    su.city AS sup_city,
+    su.postal_code AS sup_postal,
+    su.country AS sup_country,
+    su.phone AS sup_phone,
+    c.name AS customer,
+    c.contact AS cus_contact,
+    c.address AS cus_address,
+    c.city AS cus_city,
+    c.postal_code AS cus_postal,
+    c.country AS cus_country,
+    e.last_name AS em_surname,
+    e.first_name AS em_name,
+    e.birthdate AS em_birthdate,
+    sh.name AS shipper,
+    sh.phone AS ship_phone
+FROM order_details od
+INNER JOIN orders o ON od.order_id = o.id
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories ca ON p.category_id = ca.id
+INNER JOIN suppliers su ON p.supplier_id = su.id
+INNER JOIN customers c ON o.customer_id = c.id
+INNER JOIN employees e ON o.employee_id = e.employee_id
+INNER JOIN shippers sh ON o.shipper_id = sh.id
+
+-- 4. Queries
+-- a. Number of rows
+
+SELECT COUNT(*) AS total_rows 
+FROM order_details od
+INNER JOIN orders o ON od.order_id = o.id
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories ca ON p.category_id = ca.id
+INNER JOIN suppliers su ON p.supplier_id = su.id
+INNER JOIN customers c ON o.customer_id = c.id
+INNER JOIN employees e ON o.employee_id = e.employee_id
+INNER JOIN shippers sh ON o.shipper_id = sh.id;
+
+-- b. Number of rows using LEFT and RIGHT JOIN instead of INNER
+
+SELECT COUNT(*) AS total_rows 
+FROM order_details od
+LEFT JOIN orders o ON od.order_id = o.id
+LEFT JOIN products p ON od.product_id = p.id
+LEFT JOIN categories ca ON p.category_id = ca.id
+RIGHT JOIN suppliers su ON p.supplier_id = su.id
+RIGHT JOIN customers c ON o.customer_id = c.id
+RIGHT JOIN employees e ON o.employee_id = e.employee_id
+INNER JOIN shippers sh ON o.shipper_id = sh.id;
+
+-- Result: number of rows is still the same (518), this means that there is always a perfect match between all tables and there are no unused records in any of the tables.
+
+-- c. Selection where employee_id > 3 and ≤ 10
+
+SELECT 
+    o.id AS order_id,
+    p.name AS product_name,
+    od.quantity,
+    p.unit,
+    p.price,
+    o.date,
+    ca.name AS category,
+    su.name AS supplier,
+    c.name AS customer,
+    e.last_name AS em_surname,
+    e.first_name AS em_name,
+    sh.name AS shipper
+FROM order_details od
+INNER JOIN orders o ON od.order_id = o.id
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories ca ON p.category_id = ca.id
+INNER JOIN suppliers su ON p.supplier_id = su.id
+INNER JOIN customers c ON o.customer_id = c.id
+INNER JOIN employees e ON o.employee_id = e.employee_id
+INNER JOIN shippers sh ON o.shipper_id = sh.id
+WHERE e.employee_id > 3 AND e.employee_id <= 10;
+
+-- d. Group by category name, count the number of rows in the group and the average product quantity
+
+SELECT 
+    ca.name AS category,
+    COUNT(*) AS category_rows,
+    AVG(od.quantity) AS avg_quantity
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories ca ON p.category_id = ca.id
+GROUP BY ca.name;
+
+-- e. Rows where the average product quantity is greater than 21
+
+SELECT 
+    ca.name AS category,
+    COUNT(*) AS category_rows,
+    AVG(od.quantity) AS avg_quantity
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories ca ON p.category_id = ca.id
+GROUP BY ca.name
+HAVING avg_quantity > 21;
+
+-- f. Rows in descending order of the number of rows
+
+SELECT 
+    ca.name AS category,
+    COUNT(*) AS category_rows,
+    AVG(od.quantity) AS avg_quantity
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories ca ON p.category_id = ca.id
+GROUP BY ca.name
+HAVING avg_quantity > 21
+ORDER BY category_rows DESC;
+
+-- g. Selection of four rows with the first row omitted
+
+SELECT 
+    ca.name AS category,
+    COUNT(*) AS category_rows,
+    AVG(od.quantity) AS avg_quantity
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories ca ON p.category_id = ca.id
+GROUP BY ca.name
+HAVING avg_quantity > 21
+ORDER BY category_rows DESC
+LIMIT 4 OFFSET 1;

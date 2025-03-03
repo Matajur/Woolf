@@ -1,0 +1,45 @@
+-- 1. Display the order_details table and the customer_id field from the orders table
+
+SELECT *, 
+(SELECT customer_id FROM orders WHERE id = od.order_id) as customer_id
+FROM order_details od
+
+-- 2. display the order_details table where shipper_id=3
+
+SELECT * 
+FROM order_details
+WHERE order_id IN (SELECT id FROM orders WHERE shipper_ID = 3)
+
+-- 3. Select rows from the order_details where quantity>10, find the average quantity
+
+SELECT order_id, AVG(quantity) AS avg_quantity
+FROM (SELECT * FROM order_details where quantity > 10) AS temp
+GROUP BY order_id
+
+-- 4. Same selection as 3 using the WITH statement
+
+WITH temp AS (SELECT * FROM order_details where quantity > 10)
+SELECT order_id, AVG(quantity) AS avg_quantity
+FROM temp
+GROUP BY order_id
+
+-- 5. Function with two parameters that divids the first parameter by the second
+
+DROP FUNCTION IF EXISTS DevideParams;
+
+DELIMITER //
+
+CREATE FUNCTION DevideParams(param_1 FLOAT, param_2 FLOAT)
+RETURNS FLOAT
+DETERMINISTIC 
+BEGIN
+    IF param_2 = 0 THEN
+        RETURN NULL;
+    END IF;
+    RETURN param_1 / param_2;
+END //
+
+DELIMITER ;
+
+SELECT id, order_id, quantity, DevideParams(quantity, 2) AS divided_quantity
+FROM order_details

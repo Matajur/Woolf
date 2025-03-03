@@ -1,0 +1,39 @@
+-- 1. Extract the year, month, and day from the date attribute
+
+SELECT 
+    id, 
+    date, 
+    YEAR(date) AS year, 
+    MONTH(date) AS month, 
+    DAY(date) AS day
+FROM orders;
+
+-- 2. Add one day to the date attribute
+
+SELECT 
+    id, 
+    date, 
+    date + INTERVAL 1 DAY AS next_day
+FROM orders;
+
+-- 3. Number of seconds since the beginning of the countdown for the date attribute
+
+SELECT 
+    id, 
+    date, 
+    UNIX_TIMESTAMP(date) AS timestamp
+FROM orders;
+
+-- 4. Number of rows with the date between `1996-07-10 00:00:00` and `1996-10-08 00:00:00`
+
+SELECT COUNT(*) AS count_orders
+FROM orders
+WHERE date BETWEEN '1996-07-10 00:00:00' AND '1996-10-08 00:00:00';
+
+-- 5. The id, the date, and the JSON object {"id": <row id attribute>, "date": <row date attribute>}
+
+SELECT 
+    id, 
+    date, 
+    JSON_OBJECT('id', id, 'date', date) AS json_data
+FROM orders;

@@ -1,0 +1,154 @@
+-- 1. Create an use the `pandemic` schema
+
+CREATE SCHEMA pandemic;
+USE pandemic;
+
+SELECT COUNT(*) FROM infectious_cases
+
+-- 2. Normalization to 3rd normal form
+-- 2a. Create new tables
+
+CREATE TABLE countries (
+    Code VARCHAR(8) PRIMARY KEY,
+    Entity TEXT NOT NULL
+);
+
+CREATE TABLE disease_cases (
+    id SERIAL PRIMARY KEY,
+    Country_code VARCHAR(8) NOT NULL,
+    Year INT NOT NULL,
+    Number_yaws INT,
+    polio_cases INT,
+    cases_guinea_worm INT,
+    Number_rabies FLOAT,
+    Number_malaria FLOAT,
+    Number_hiv FLOAT,
+    Number_tuberculosis FLOAT,
+    Number_smallpox INT,
+    Number_cholera_cases INT,
+    FOREIGN KEY (Country_code) REFERENCES countries(Code)
+);
+
+-- 2b. Check columns data types
+
+SHOW COLUMNS FROM infectious_cases ;
+
+-- 2c. Convert text columns to numerical
+
+UPDATE infectious_cases
+SET Number_yaws = NULL 
+WHERE TRIM(Number_yaws) = '';
+
+ALTER TABLE infectious_cases 
+MODIFY COLUMN Number_yaws INT NULL DEFAULT NULL;
+
+UPDATE infectious_cases
+SET Number_rabies = NULL 
+WHERE TRIM(Number_rabies) = '';
+
+ALTER TABLE infectious_cases 
+MODIFY COLUMN Number_rabies FLOAT NULL DEFAULT NULL;
+
+UPDATE infectious_cases
+SET Number_malaria = NULL 
+WHERE TRIM(Number_malaria) = '';
+
+ALTER TABLE infectious_cases 
+MODIFY COLUMN Number_malaria FLOAT NULL DEFAULT NULL;
+
+UPDATE infectious_cases
+SET Number_hiv = NULL 
+WHERE TRIM(Number_hiv) = '';
+
+ALTER TABLE infectious_cases 
+MODIFY COLUMN Number_hiv FLOAT NULL DEFAULT NULL;
+
+UPDATE infectious_cases
+SET Number_tuberculosis = NULL 
+WHERE TRIM(Number_tuberculosis) = '';
+
+ALTER TABLE infectious_cases 
+MODIFY COLUMN Number_tuberculosis FLOAT NULL DEFAULT NULL;
+
+UPDATE infectious_cases
+SET Number_smallpox = NULL 
+WHERE TRIM(Number_smallpox) = '';
+
+ALTER TABLE infectious_cases 
+MODIFY COLUMN Number_smallpox INT NULL DEFAULT NULL;
+
+UPDATE infectious_cases
+SET Number_cholera_cases = NULL 
+WHERE TRIM(Number_cholera_cases) = '';
+
+ALTER TABLE infectious_cases 
+MODIFY COLUMN Number_cholera_cases INT NULL DEFAULT NULL;
+
+-- 2d. Populate the countries table
+
+INSERT INTO countries (Code, Entity)
+SELECT DISTINCT Code, Entity FROM infectious_cases;
+
+SELECT COUNT(*) FROM countries;
+
+-- 2e. Populate the disease_cases table
+
+INSERT INTO disease_cases (
+    Country_code, Year, Number_yaws, polio_cases, cases_guinea_worm, 
+    Number_rabies, Number_malaria, Number_hiv, Number_tuberculosis, 
+    Number_smallpox, Number_cholera_cases
+)
+SELECT 
+    Code, Year, Number_yaws, polio_cases, cases_guinea_worm, 
+    Number_rabies, Number_malaria, Number_hiv, Number_tuberculosis, 
+    Number_smallpox, Number_cholera_cases
+FROM infectious_cases;
+
+SELECT COUNT(*) FROM disease_cases;
+
+-- 3. Data analysis
+
+SELECT 
+    Country_Code, 
+    AVG(Number_rabies) AS avg_rabies, 
+    MIN(Number_rabies) AS min_rabies, 
+    MAX(Number_rabies) AS max_rabies, 
+    SUM(Number_rabies) AS sum_rabies
+FROM infectious_cases
+WHERE Number_rabies IS NOT NULL
+GROUP BY Country_Code
+ORDER BY avg_rabies DESC
+LIMIT 10;
+
+-- 4. Column of time difference in years
+
+SELECT 
+    Year,
+    STR_TO_DATE(CONCAT(Year, '-01-01'), '%Y-%m-%d') AS first_jan_date,
+    CURDATE() AS today,
+    TIMESTAMPDIFF(YEAR, STR_TO_DATE(CONCAT(Year, '-01-01'), '%Y-%m-%d'), CURDATE()) AS year_difference
+FROM disease_cases;
+
+-- 5. Time function
+
+DELIMITER //
+
+CREATE FUNCTION YearDifference(input_year INT) 
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE first_jan_date DATE;
+    DECLARE year_diff INT;
+
+    SET first_jan_date = STR_TO_DATE(CONCAT(input_year, '-01-01'), '%Y-%m-%d');
+    SET year_diff = TIMESTAMPDIFF(YEAR, first_jan_date, CURDATE());
+
+    RETURN year_diff;
+END //
+
+DELIMITER ;
+
+SELECT 
+    Year, 
+    YearDifference(Year) AS year_difference
+FROM disease_cases;

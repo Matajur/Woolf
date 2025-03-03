@@ -1,0 +1,37 @@
+-- 1a. Select all columns from the products table
+
+SELECT *
+FROM products;
+
+-- 1b. Select only the name, phone columns from the shippers table
+
+SELECT name, phone
+FROM shippers;
+
+-- 2. Find the average, maximum and minimum value of the price column of the products table
+
+SELECT AVG(price) AS avg_price, 
+       MAX(price) AS max_price, 
+       MIN(price) AS min_price
+FROM products;
+
+-- 3. Select unique values ​​for the category_id and price columns of the products table, display order in descending order of price value, and only 10 rows will be shown
+
+SELECT DISTINCT category_id, price
+FROM products
+ORDER BY price DESC
+LIMIT 10;
+
+-- 4. Find the number of products (rows) that are in the price range from 20 to 100
+
+SELECT COUNT(*) AS counted_products
+FROM products
+WHERE 20 <= price <= 100;
+
+-- 5. Find the number of products (rows) and the average price (price) for each supplier (supplier_id)
+
+SELECT supplier_id,
+       COUNT(*) AS num_products,
+       AVG(price) AS avg_price
+FROM products
+GROUP BY supplier_id;
