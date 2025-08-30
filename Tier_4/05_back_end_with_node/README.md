@@ -1,4 +1,4 @@
-# Tier 5. Module 5: Fullstack. Back End Development: Node.js
+# Tier 4. Module 5: Fullstack. Back End Development: Node.js
 
 * Topic 1 - Basics of Node.js
 * Topic 2 - Development of console applications
@@ -16,5 +16,6 @@
 1. (GitHub: Node.js Lectures)[https://github.com/BogdanLyamzin/MCS_3_Node.js]
 
 ## Final project:
-1. (GitHub)[]
-2. (Live Page)[]
+1. (GitHub FrontEnd)[https://github.com/zharuk-alex/foodie-react-app]
+2. (GitHub BackEnd)[https://github.com/megabytos/foodie-node-api]
+3. (Live Page)[https://foodie-react-app.vercel.app/]

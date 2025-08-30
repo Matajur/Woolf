@@ -1,0 +1,35 @@
+server:
+  service:
+    type: LoadBalancer
+    port: 443
+
+applications:
+  - name: django-app
+    namespace: dev
+    project: default
+    source:
+      repoURL: "${var.github_repo_url}"
+      targetRevision: "${var.github_branch}"
+      path: helm-chart
+      helm:
+        valueFiles:
+          - values.yaml
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: dev
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+
+repositories:
+  - name: django-app
+    url: "${var.github_repo_url}"
+    type: git
+    username: "${github_username}"
+    password: "${github_token}"
+
+
+repoConfig:
+  insecure: "true"
+  
