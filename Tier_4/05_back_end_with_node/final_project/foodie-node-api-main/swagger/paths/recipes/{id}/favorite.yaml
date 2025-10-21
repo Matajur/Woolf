@@ -1,0 +1,119 @@
+tags:
+    - Recipes
+summary: Get user's favorite recipes
+description: |
+    Returns paginated list of user's favorite recipes.
+    Can get favorites for any user by ID (if authorized as admin)
+    or only own favorites when using own ID.
+operationId: getUserFavoriteRecipes
+security:
+    - bearerAuth: []
+parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+          type: string
+          example: 'user123'
+      description: |
+          ID of the user whose favorites to retrieve.
+          For regular users - must be their own ID.
+    - in: query
+      name: page
+      schema:
+          type: integer
+          minimum: 1
+          default: 1
+      description: Page number for pagination
+    - in: query
+      name: limit
+      schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 20
+      description: Number of items per page
+responses:
+    '200':
+        description: Successful operation
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        recipes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                        example: 'recipe456'
+                                    title:
+                                        type: string
+                                        example: 'Recipe title'
+                                    description:
+                                        type: string
+                                        example: 'Recipe description'
+                                    time:
+                                        type: integer
+                                        example: 30
+                                    thumb:
+                                        type: string
+                                        format: uri
+                                        example: 'https://example.com/image.jpg'
+                                    createdAt:
+                                        type: string
+                                        format: date-time
+                                        example: '2023-05-20T14:30:00.000Z'
+                                    ownerName:
+                                        type: string
+                                        example: 'owner name'
+                                    ownerAvatar:
+                                        type: string
+                                        format: uri
+                                        example: 'https://example.com/avatar.jpg'
+                                    isFavorite:
+                                        type: boolean
+                                        example: true
+                                    ingredients:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id:
+                                                    type: string
+                                                    example: 'ingredient789'
+                                                name:
+                                                    type: string
+                                                    example: 'ingredients name'
+                                                img:
+                                                    type: string
+                                                    format: uri
+                                                    example: 'https://example.com/ingredient.jpg'
+                                                measure:
+                                                    type: string
+                                                    example: '200 г'
+                        currentPage:
+                            type: integer
+                            example: 1
+                        totalPages:
+                            type: integer
+                            example: 5
+                        totalRecipes:
+                            type: integer
+                            example: 100
+                        recipesPerPage:
+                            type: integer
+                            example: 20
+    '400':
+        description: |
+            Bad Request. Possible reasons:
+            - Invalid user ID format
+            - Page number out of range
+    '401':
+        description: Unauthorized (missing or invalid token)
+    '403':
+        description: Forbidden (trying to access other user's favorites without permission)
+    '500':
+        description: Internal server error

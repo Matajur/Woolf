@@ -1,0 +1,169 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--main-radius);
+  text-transform: uppercase;
+  font-family: var(--font-family);
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+  padding: 16px 32px;
+  height: fit-content;
+  transition: background-color 0.2s ease, border-color 0.3s ease;
+}
+
+.button:hover svg {
+  fill: currentColor;
+}
+
+.button:disabled {
+  background-color: var(--color-gray);
+  cursor: not-allowed;
+}
+
+.main {
+  composes: button;
+  background-color: var(--color-main);
+  color: var(--color-white);
+  border: unset;
+}
+
+.main:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+}
+
+.outlined {
+  composes: button;
+  background-color: transparent;
+  border: 1px solid var(--color-secondary);
+  padding-block: 15px;
+}
+
+.outlined:hover {
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+.secondary {
+  composes: button;
+  background-color: var(--color-main);
+  color: var(--color-white);
+  width: 400px;
+}
+
+.secondary:hover {
+  background-color: var(--color-gray);
+}
+
+.btn-icon {
+  composes: button;
+  background-color: transparent;
+  border: 1px solid var(--color-gray-light);
+  padding: 12px;
+  color: var(--color-main);
+}
+
+.btn-icon-active {
+  composes: button;
+  background-color: transparent;
+  border: 1px solid var(--color-gray-light);
+  padding: 12px;
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+.btn-icon-active svg {
+  background-color: var(--color-main);
+  fill: currentColor;
+}
+
+.btn-icon:hover {
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+.btn-icon:hover svg {
+  fill: currentColor;
+}
+
+.btn-icon-sm {
+  composes: btn-icon;
+  padding: 10px;
+}
+
+.hiddenChild {
+  visibility: hidden;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.register {
+  composes: button;
+  background-color: var(--color-main);
+  color: var(--color-white);
+  border: none;
+  padding: 14px 28px;
+}
+
+@media (max-width: 768px) {
+  .register {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 10px 16px;
+  }
+}
+
+.login {
+  composes: button;
+  background-color: var(--color-white);
+  color: var(--color-main);
+  border: none;
+  padding: 14px 28px;
+}
+
+@media (max-width: 768px) {
+  .login {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 10px 16px;
+  }
+}
+
+.logoutInHead {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 2;
+  text-align: left;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  background-color: transparent;
+  padding: 0;
+}
+
+:global([data-theme='dark']) .logoutInHead {
+  color: var(--color-gray-light);
+}
+
+.logoutInHead:hover {
+  color: var(--color-black);
+}
+
+:global([data-theme='dark']) .logoutInHead:hover {
+  color: var(--color-white);
+}
+
+.clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  height: fit-content;
+  background-color: transparent;
+}

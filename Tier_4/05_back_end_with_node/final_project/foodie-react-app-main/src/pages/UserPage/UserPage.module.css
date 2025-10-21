@@ -1,0 +1,25 @@
+.title {
+  margin-bottom: 32px;
+}
+
+.profileTitle {
+  margin-bottom: 16px;
+  margin-top: 32px;
+}
+
+@media (min-width: 768px) {
+  .userContainer {
+    width: 394px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .userWrapper {
+    margin: 0 auto;
+    display: flex;
+    width: 1312px;
+  }
+  .tabsContainer {
+    width: 100%;
+  }
+}

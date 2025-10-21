@@ -1,0 +1,66 @@
+.fileInput {
+  display: none;
+}
+
+.btnUploadAvatar {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background-color: transparent;
+}
+
+@media screen and (min-width: 768px) {
+  .btnUploadAvatar {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.imgThumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+@media screen and (min-width: 768px) {
+  .imgThumb {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.avatarImg {
+  object-fit: contain;
+  object-position: center;
+}
+
+.addBtn {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  background-color: var(--color-main);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(-50%, 50%);
+  z-index: 2;
+}
+
+@media screen and (min-width: 768px) {
+  .addBtn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.iconPlus {
+  stroke: var(--color-white);
+}

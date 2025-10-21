@@ -1,0 +1,20 @@
+.path {
+  color: var(--color-gray);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: -2%;
+}
+
+.current {
+  color: var(--color-main);
+  margin-left: 8px;
+}
+
+.link {
+  margin-right: 8px;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

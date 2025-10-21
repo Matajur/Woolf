@@ -1,0 +1,151 @@
+tags:
+    - Users
+summary: Get a user's followers
+description: |
+    This endpoint retrieves the followers of a specific user.
+    - Each follower contains basic information and a list of their owned recipes (if available).
+    - The response includes pagination details for both followers and their recipes.
+operationId: getFollowers
+security:
+    - bearerAuth: []
+parameters:
+    - name: id
+      in: path
+      description: 'User ID to get followers for'
+      required: true
+      schema:
+          type: string
+          example: '671264281222679af8484a00'
+    - name: page
+      in: query
+      description: 'Page number for followers pagination (defaults to 1)'
+      required: false
+      schema:
+          type: integer
+          example: 1
+    - name: limit
+      in: query
+      description: 'Number of followers to return per page (defaults to 5)'
+      required: false
+      schema:
+          type: integer
+          example: 5
+    - name: recipeLimit
+      in: query
+      description: 'Number of recipes to return per follower (defaults to 4)'
+      required: false
+      schema:
+          type: integer
+          example: 4
+responses:
+    '200':
+        description: 'Successfully retrieved followers'
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                        - message
+                        - data
+                    properties:
+                        message:
+                            type: string
+                            description: 'Response message'
+                            example: 'Followers list of users found successfully'
+                        data:
+                            type: object
+                            required:
+                                - followers
+                                - page
+                                - limit
+                                - totalItem
+                                - totalPage
+                                - hasPreviousPage
+                                - hasNextPage
+                            properties:
+                                followers:
+                                    type: array
+                                    description: 'List of followers'
+                                    items:
+                                        type: object
+                                        required:
+                                            - id
+                                            - name
+                                            - avatar
+                                            - totalRecipes
+                                            - following
+                                            - ownedRecipes
+                                        properties:
+                                            id:
+                                                type: string
+                                                description: "Follower's unique identifier"
+                                                example: 'follower id'
+                                            name:
+                                                type: string
+                                                description: "Follower's name"
+                                                example: 'Follower name'
+                                            avatar:
+                                                oneOf:
+                                                    - type: string
+                                                      description: "Follower's avatar URL"
+                                                      example: 'http://example.com/avatar.jpg'
+                                                    - type: 'null'
+                                                      description: 'Avatar can be null'
+                                                      example: null
+                                            totalRecipes:
+                                                type: string
+                                                description: 'Total number of recipes owned by the follower'
+                                                example: '3'
+                                            following:
+                                                type: string
+                                                description: 'Indicates if the user is following the given follower'
+                                                example: '0'  # 0 for not following, 1 for following
+                                            ownedRecipes:
+                                                type: array
+                                                description: 'Preview of recipes owned by the follower'
+                                                items:
+                                                    type: object
+                                                    required:
+                                                        - id
+                                                        - thumb
+                                                    properties:
+                                                        id:
+                                                            type: string
+                                                            description: "Recipe's unique identifier"
+                                                            example: 'recipe ID'
+                                                        thumb:
+                                                            type: string
+                                                            description: "Recipe's preview image URL"
+                                                            example: 'http://example.com/recipe.jpgg'
+                                page:
+                                    type: integer
+                                    description: 'Current page number'
+                                    example: 1
+                                limit:
+                                    type: integer
+                                    description: 'Number of followers per page'
+                                    example: 5
+                                totalItem:
+                                    type: integer
+                                    description: 'Total number of followers'
+                                    example: 1
+                                totalPage:
+                                    type: integer
+                                    description: 'Total number of pages'
+                                    example: 1
+                                hasPreviousPage:
+                                    type: boolean
+                                    description: 'Indicates if there is a previous page'
+                                    example: false
+                                hasNextPage:
+                                    type: boolean
+                                    description: 'Indicates if there is a next page'
+                                    example: false
+    '400':
+        description: 'Bad request: Invalid or missing query parameters'
+    '401':
+        $ref: ../../../components/responses/401.yaml
+    '404':
+        $ref: ../../../components/responses/404.yaml
+    '500':
+        $ref: ../../../components/responses/500.yaml

@@ -1,0 +1,124 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.cardImage {
+  display: block;
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: var(--main-radius);
+  margin-bottom: 8px;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.33333;
+  text-transform: uppercase;
+  color: var(--color-main);
+}
+
+.text {
+  line-height: 1.42857;
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+
+.actions {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  align-self: center;
+  justify-content: space-between;
+}
+
+.profileBtn {
+  all: unset;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.42857;
+}
+
+.actionBtns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.btn {
+  color: var(--color-main)
+}
+
+.iconFav {
+  color: var(--color-white);
+  stroke: var(--color-main);
+  stroke-width: 2;
+}
+
+.iconIsFav {
+  composes: iconFav;
+  color: var(--color-main);
+}
+
+.btn {
+  padding: 10px;
+}
+
+.btn:hover .iconFav {
+  color: var(--color-main);
+  stroke: var(--color-white);
+}
+
+.btn:hover .iconIsFav {
+  color: var(--color-white);
+  stroke: var(--color-white);
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+
+@media (min-width: 768px) {
+  .cardImage {
+    height: 275px;
+  }
+
+  .title {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .text {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .btn {
+    padding: 12px;
+  }
+
+  .icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (min-width: 1440px) {}

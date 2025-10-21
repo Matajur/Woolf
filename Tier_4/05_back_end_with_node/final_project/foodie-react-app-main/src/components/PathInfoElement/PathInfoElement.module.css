@@ -1,0 +1,35 @@
+.card {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+@media screen and (min-width: 768px) {
+  .card {
+    margin-bottom: 40px;
+  }
+}
+
+.item {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 12px;
+
+  /* line-height: 18px; */
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+.item:last-child {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 12px;
+
+  /* line-height: 18px; */
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--color-main);
+  user-select: none;
+}

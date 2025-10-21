@@ -1,0 +1,55 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 228px;
+}
+
+@media (min-width: 375px) {
+  .modalContent {
+    width: 283px;
+  }
+}
+
+.logout {
+  margin-top: 32px;
+  width: 100%;
+  border-radius: 30px;
+  background-color: var(--color-main);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -2%;
+  padding: 14px;
+}
+
+.cancel {
+  margin-top: 16px;
+  width: 100%;
+  border-radius: 30px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -2%;
+  padding: 14px;
+}
+
+.title {
+  color: var(--color-main);
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 1.14;
+  letter-spacing: -2%;
+}
+
+.description {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -2%;
+  color: var(--color-gray);
+  margin-top: 16px;
+}

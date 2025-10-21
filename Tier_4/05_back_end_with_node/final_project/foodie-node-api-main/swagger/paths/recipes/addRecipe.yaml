@@ -1,0 +1,116 @@
+tags:
+    - Recipes
+summary: Create a new recipe with thumbnail
+description: |
+    This endpoint allows authenticated users to create new recipes.
+    Ingredients should be sent as a JSON string in the 'ingredients' field.
+operationId: createRecipe
+security:
+    - bearerAuth: []
+requestBody:
+    required: true
+    content:
+        multipart/form-data:
+            schema:
+                type: object
+                required:
+                    - title
+                    - time
+                    - categoryId
+                    - ingredients
+                properties:
+                    thumb:
+                        type: string
+                        format: binary
+                        description: Recipe thumbnail image (optional)
+                    title:
+                        type: string
+                        minLength: 2
+                        maxLength: 128
+                        example: 'Grilled Squid'
+                    time:
+                        type: integer
+                        minimum: 1
+                        example: 30
+                    instructions:
+                        type: string
+                        example: 'Step 1 Prepare the squid...'
+                    description:
+                        type: string
+                        example: 'A delicious grilled squid recipe'
+                    categoryId:
+                        type: string
+                        format: uuid
+                        example: '6462a6cd4c3d0ddd28897f95'
+                    areaId:
+                        type: string
+                        format: uuid
+                        example: '6462a6f04c3d0ddd28897f9e'
+                    ingredients:
+                        type: string
+                        description: |
+                            JSON array of ingredients as string.
+                            Example: [{"ingredientId":"640c2dd963a319ea671e3664","measure":"100 g"}]
+                        example: '[{"ingredientId":"640c2dd963a319ea671e3664","measure":"100 g"}]'
+responses:
+    '201':
+        description: Recipe created successfully
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                            example: 'new recipe id'
+                        title:
+                            type: string
+                            example: 'Grilled Squid'
+                        categoryId:
+                            type: string
+                            format: uuid
+                            example: 'category id'
+                        ownerId:
+                            type: string
+                            example: 'recipe owner id'
+                        areaId:
+                            type: string
+                            format: uuid
+                            example: 'area id'
+                        instructions:
+                            type: string
+                            example: 'Step 1 Prepare the squid...'
+                        description:
+                            type: string
+                            example: 'A delicious grilled squid recipe'
+                        time:
+                            type: integer
+                            example: 1
+                        thumb:
+                            type: string
+                            format: uri
+                            example: 'https://example/recipe.jpg'
+                        ingredients:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                        example: 'ingredient id'
+                                    name:
+                                        type: string
+                                        example: 'Bacon'
+                                    measure:
+                                        type: string
+                                        example: '100 g'
+    '400':
+        description: |
+            Bad request. Possible reasons:
+            - Invalid input data
+            - Missing required fields
+            - Invalid ingredients format
+    '401':
+      $ref: '../../components/responses/401.yaml'
+    '500':
+      $ref: '../../components/responses/500.yaml'

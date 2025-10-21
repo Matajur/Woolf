@@ -1,0 +1,158 @@
+.container {
+  display: block;
+}
+
+.headerWrapper {
+  padding-bottom: 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 20px;
+  margin-top: 8px;
+  margin-inline: 8px;
+}
+
+.headerWrapperDark {
+  background-color: var(--color-main);
+  border-top-left-radius: var(--main-radius);
+  border-top-right-radius: var(--main-radius);
+}
+
+.menuAndUser {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+
+
+@media (min-width: 768px) {
+  .menuOpen {
+    display: none;
+  }
+}
+
+.menuClose {}
+
+.burgerIcon {
+  width: 30px;
+  height: 30px;
+  margin-top: 1px;
+  color: var(--color-main);
+  stroke: var(--color-main);
+  fill: var(--color-main);
+}
+
+:global([data-theme='dark']) .burgerIcon {
+  color: var(--color-white);
+  stroke: var(--color-white);
+  fill: var(--color-white);
+}
+
+.closeIcon {
+  position: absolute;
+  right: 24px;
+  top: 30px;
+  width: 30px;
+  height: 30px;
+  color: var(--color-main);
+  stroke: var(--color-main);
+  fill: var(--color-main);
+}
+
+:global([data-theme='dark']) .closeIcon {
+  color: var(--color-white);
+  stroke: var(--color-white);
+  fill: var(--color-white);
+}
+
+.menuContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.menuContainerMobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: var(--color-white);
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  transform: translateX(100%);
+  transition: none;
+
+}
+
+:global([data-theme='dark']) .menuContainerMobile {
+  background-color: var(--color-main);
+}
+
+.menuContainerOpen {
+  transform: translateX(0%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.menuContainerClosed {
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 998;
+}
+
+
+.logoMenu {
+  position: absolute;
+  left: 24px;
+  top: 32px;
+
+}
+
+.navMenu {
+  display: flex !important;
+}
+
+.noScroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .headerWrapper {
+    padding-bottom: 80px;
+    margin-top: 16px;
+    margin-inline: 16px;
+  }
+
+  .menuContainer>* {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1440px) {
+  .headerWrapper {
+    padding-bottom: 80px;
+    margin-top: 20px;
+    margin-inline: auto;
+  }
+}

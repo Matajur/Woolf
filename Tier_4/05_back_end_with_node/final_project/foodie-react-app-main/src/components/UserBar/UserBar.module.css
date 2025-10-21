@@ -1,0 +1,65 @@
+.userWrapper {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.arrowIcon {
+  vertical-align: bottom;
+  margin-left: 0.5em;
+  font-size: 0.75em;
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  min-width: 100%;
+  margin-top: 6px;
+  border: 1px solid var(--color-secondary);
+  border-radius: 15px;
+  display: flex;
+  gap: 1px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 16px;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 999;
+}
+
+:global([data-theme='dark']) .menu {
+  border: 1px solid var(--color-gray-light);
+}
+
+.menuVisible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.profileLink {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 2;
+  text-align: left;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+}
+:global([data-theme='dark']) .profileLink {
+  color: var(--color-gray-light);
+}
+.profileLink:hover {
+  color: var(--color-black);
+}
+:global([data-theme='dark']) .profileLink:hover {
+  color: var(--color-white);
+}
+.logoutIcon {
+  vertical-align: bottom;
+  margin-left: 2px;
+  margin-bottom: 2px;
+}

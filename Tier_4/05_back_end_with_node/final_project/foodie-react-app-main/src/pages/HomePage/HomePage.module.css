@@ -1,0 +1,8 @@
+.hero {
+  background-color: var(--color-main);
+}
+
+.heroBtn {
+  color: var(--color-white);
+  border-color: var(--color-white);
+}

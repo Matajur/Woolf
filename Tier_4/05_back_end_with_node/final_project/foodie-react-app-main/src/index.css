@@ -1,0 +1,30 @@
+@import 'styles/reset.css';
+@import 'styles/variables.css';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+  min-height: 100vh;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 16px;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  color: var(--color-secondary);
+}
+
+main {
+  flex-grow: 1;
+}

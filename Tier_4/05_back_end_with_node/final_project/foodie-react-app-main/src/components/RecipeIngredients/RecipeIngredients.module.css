@@ -1,0 +1,166 @@
+.card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 18px;
+
+  /* line-height: 24px; */
+  line-height: 1.33333;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--color-main);
+}
+
+@media screen and (min-width: 768px) {
+  .title {
+    font-size: 20px;
+
+    /* line-height: 24px; */
+    line-height: 1.2;
+  }
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+@media screen and (min-width: 375px) {
+  .items {
+    flex-direction: row;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .items {
+    gap: 20px;
+  }
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+  height: 75px;
+}
+
+@media screen and (min-width: 375px) {
+  .item {
+    width: 152px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .item {
+    gap: 14px;
+    width: 178px;
+    height: 90px;
+  }
+}
+
+.imgContainer {
+  border: 1px solid var(--color-gray);
+  border-radius: 15px;
+  width: 75px;
+  flex-shrink: 0;
+  height: 75px;
+  padding: 10px;
+}
+
+@media screen and (min-width: 768px) {
+  .imgContainer {
+    height: 90px;
+    width: 90px;
+    padding: 15px;
+  }
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.itemContent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 2px;
+  width: calc(100% - 90px);
+  overflow: hidden;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+@media screen and (min-width: 768px) {
+  .itemContent {
+    width: calc(100% - 75px);
+  }
+}
+
+.name {
+  font-weight: 500;
+  font-size: 14px;
+
+  /* line-height: 20px; */
+  line-height: 1.42857;
+  letter-spacing: -0.02em;
+  color: var(--color-main);
+}
+
+.amount {
+  font-weight: 500;
+  font-size: 14px;
+
+  /* line-height: 20px; */
+  line-height: 1.42857;
+  letter-spacing: -0.02em;
+  color: var(--color-gray);
+}
+
+.amount {
+  display: block; /* gerekli! */
+  max-width: 90%; /* container'a taşmasın */
+  white-space: nowrap; /* satır kırılmasın */
+  overflow: hidden; /* taşanı gizle */
+  text-overflow: ellipsis; /* ... göster */
+}
+
+.deleteBtn {
+  position: absolute;
+  top: -5px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: none;
+  color: #000;
+  cursor: pointer;
+}
+.deleteBtn:hover {
+  transform: scale(1.1);
+}
+
+.name,
+.amount {
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: var(--color-main);
+}

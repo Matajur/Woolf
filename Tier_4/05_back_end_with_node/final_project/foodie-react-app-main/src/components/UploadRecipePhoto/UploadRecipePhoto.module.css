@@ -1,0 +1,166 @@
+.uploadContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .uploadContainer {
+    gap: 20px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .uploadContainer {
+    width: 550px;
+  }
+}
+
+.fileInput {
+  display: none;
+}
+
+.imageBackground {
+  position: relative;
+  width: 100%;
+  height: 318px;
+  z-index: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .imageBackground {
+    height: 400px;
+    z-index: 1;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .imageBackground {
+    width: 550px;
+    z-index: 1;
+  }
+}
+
+.recipeThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.uploadBtnWthImage {
+  width: 100%;
+  height: 318px;
+  border: none;
+  border-radius: 30px;
+  overflow: hidden;
+  padding: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .uploadBtnWthImage {
+    height: 400px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .uploadBtnWthImage {
+    width: 550px;
+  }
+}
+
+.uploadBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  width: 100%;
+  height: 318px;
+  border-radius: 30px;
+  border: 1px dashed var(--color-gray);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .uploadBtn {
+    height: 400px;
+    gap: 16px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .uploadBtn {
+    width: 550px;
+  }
+}
+
+.iconsContainer {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.iconCapture {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.mainIcon {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.iconBg {
+  position: absolute;
+  top: 9.3px;
+  left: 8.9px;
+  width: 44.8px;
+  height: 45px;
+  background-color: var(--color-white);
+  border-radius: 5px;
+  z-index: 2;
+}
+
+.centerIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  z-index: 3;
+}
+
+.text {
+  color: var(--color-main);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.28px;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+}
+
+@media screen and (min-width: 768px) {
+  .uploadBtn {
+    font-size: 16px;
+    letter-spacing: -0.32px;
+  }
+}
+
+.btnAfterPicture {
+  background-color: transparent;
+}

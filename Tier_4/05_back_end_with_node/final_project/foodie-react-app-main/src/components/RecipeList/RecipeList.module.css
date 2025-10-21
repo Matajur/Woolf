@@ -1,0 +1,34 @@
+.itemsSet {
+  --items: 1;
+  --indent: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.item {
+  flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
+}
+
+
+@media (min-width: 768px) {
+  .itemsSet {
+    --indent: 20px;
+    --items: 2;
+    gap: 40px var(--indent);
+  }
+
+  .item {
+    flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
+  }
+}
+
+@media (min-width: 1440px) {
+  .itemsSet {
+    --items: 3;
+  }
+
+  .item {
+    flex-basis: calc((100% - var(--indent) * (var(--items) - 1)) / var(--items));
+  }
+}

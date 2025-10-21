@@ -1,0 +1,50 @@
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  gap: 6px;
+}
+
+.page,
+.prev,
+.next,
+.break {
+  display: flex;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-gray);
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.page  > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+.page:hover,
+.prev:hover,
+.next:hover {
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+.active {
+  border-color: var(--color-main);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
