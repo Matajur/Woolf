@@ -1,0 +1,4 @@
+fastapi=0.124
+passlib=1.7
+pydantic=2.12
+structlog=25.5

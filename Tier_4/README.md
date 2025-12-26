@@ -6,3 +6,4 @@
 - Module 4 - Mastering Front-End Development with React
 - Module 5 - Back-End Development with Node.js
 - Module 6 - DevOps CI/CD
+- Module 7 - Secure Software Development and Integration
