@@ -1,0 +1,91 @@
+stages:
+  - retrain
+  - build
+  - update-chart
+
+variables:
+  IMAGE_REPO: "$CI_REGISTRY_IMAGE"
+  IMAGE_TAG: "$CI_COMMIT_SHORT_SHA"
+  IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+
+# 1) Retrain (automatically by default)
+retrain-model:
+  stage: retrain
+  image: python:3.11-slim
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: on_success
+    - when: manual
+  script:
+    - pip install --no-cache-dir -r requirements.txt
+    - python -m model.train --output-dir model
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - model/model.pkl
+      - model/reference.npy
+
+# 2) Build container image (Kaniko)
+build-image:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  needs:
+    - job: retrain-model
+      artifacts: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: on_success
+    - when: manual
+  script:
+    - |
+      set -eu
+      mkdir -p /kaniko/.docker
+
+      cat > /kaniko/.docker/config.json <<EOF
+      {
+        "auths": {
+          "${CI_REGISTRY}": {
+            "username": "${CI_REGISTRY_USER}",
+            "password": "${CI_REGISTRY_PASSWORD}"
+          }
+        }
+      }
+      EOF
+
+      /kaniko/executor \
+        --context "${CI_PROJECT_DIR}" \
+        --dockerfile "${CI_PROJECT_DIR}/Dockerfile" \
+        --destination "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}"
+
+# 3) Update Helm values with the new image tag and push commit back
+update-helm-values:
+  stage: update-chart
+  image: alpine:3.19
+  needs:
+    - job: build-image
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: on_success
+    - when: manual
+  script:
+    - |
+      set -eu
+
+      apk add --no-cache git yq
+
+      git config user.name "gitlab-ci"
+      git config user.email "gitlab-ci@example.com"
+
+      yq -i '.image.tag = strenv(IMAGE_TAG)' helm/values.yaml
+
+      git add helm/values.yaml
+      git commit -m "chore: bump image to ${IMAGE_TAG} [skip ci]" || echo "No changes to commit"
+
+      if [ -z "${GIT_PUSH_TOKEN:-}" ]; then
+        echo "ERROR: GIT_PUSH_TOKEN is not set"
+        exit 1
+      fi
+
+      git push "https://${GIT_PUSH_USER:-oauth2}:${GIT_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" "HEAD:${CI_COMMIT_REF_NAME}"

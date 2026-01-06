@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mlops-inference-service.fullname" . }}
+  labels:
+    {{- include "mlops-inference-service.labels" . | nindent 4 }}
+    app: mlops-inference-service
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    {{- include "mlops-inference-service.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP

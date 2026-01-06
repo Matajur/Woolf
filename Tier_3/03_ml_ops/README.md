@@ -15,4 +15,5 @@
 
 ## Educational repositories:
 
-1. (GitHub: MLOps Lectures)[https://github.com/vasiliy-sharko/mlops-course]
+1. [GitHub: MLOps Lectures](https://github.com/vasiliy-sharko/mlops-course)
+2. [GitHub: Final Project Temlate](https://github.com/ym-empat/ML-Ops-Final-Project-Template)

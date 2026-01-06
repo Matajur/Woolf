@@ -43,5 +43,5 @@ variable "public_subnet_suffix_bits" {
 variable "my_ip_address" {
   description = "Your public IP address for EKS cluster access"
   type        = string
-  default     = "Put your IP address here without /xx"
+  default     = "Put your IP here without /32"
 }
