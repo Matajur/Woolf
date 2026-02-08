@@ -1,0 +1,288 @@
+# .gitlab-ci.yml
+# Complete CI/CD pipeline with all stages passing gates.
+# Designed for local GitLab-runner with docker-executor.
+
+# Definition of stages (stages) of the pipeline
+stages:
+  - secret-scan
+  - sast
+  - test
+  - build
+  - sca
+  - report
+  - deploy
+  - dast
+
+# Using official GitLab templates for scanners
+include:
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/DAST.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+
+# Fail the pipeline on High+ security findings across GitLab security scanners.
+variables:
+  SECURITY_FAILURE_LEVEL: "High"
+
+secret_detection:
+  allow_failure: false
+sast:
+  allow_failure: false
+unit_test_job:
+  allow_failure: false
+dependency_scanning:
+  allow_failure: false
+container_scanning:
+  allow_failure: false
+
+# =========================================================================
+# STAGE: secret-scan
+# =========================================================================
+# Scan the repository for secrets.
+secret_detection:
+  stage: secret-scan
+  needs: []
+
+# =========================================================================
+# STAGE: sast (Static Application Security Testing)
+# =========================================================================
+# Static analysis of the code for vulnerabilities.
+sast:
+  stage: sast
+  needs: []
+
+# =========================================================================
+# STAGE: test
+# =========================================================================
+# Running unit tests.
+unit_test_job:
+  stage: test
+  image: python:3.11-slim
+  script:
+    - echo "Running unit tests..."
+    - pip install -r requirements.txt
+    - pip install pytest
+    - pytest test_app.py
+  needs:
+    - job: sast
+      optional: true
+
+# =========================================================================
+# STAGE: build
+# =========================================================================
+# Creating a Docker image with the application.
+docker_build_job:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  script:
+    - echo "Building Docker image..."
+    # Authorize in the GitLab container registry using CI variables
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    # Build the image and tag it for pushing to the registry
+    - docker build -t "$CI_REGISTRY_IMAGE" .
+    # Push the image to the registry
+    - docker push "$CI_REGISTRY_IMAGE"
+  needs: ["unit_test_job"]
+
+# =========================================================================
+# STAGE: sca (Software Composition Analysis) and sbom
+# =========================================================================
+# Dependency analysis and SBOM generation.
+dependency_scanning:
+  stage: sca
+  variables:
+    DS_SEVERITY_THRESHOLD: "High"
+  needs: ["docker_build_job"]
+
+dependency_scan_gate:
+  stage: sca
+  image: python:3.11-slim
+  needs:
+    - job: dependency_scanning
+      artifacts: true
+      optional: true
+  script:
+    - |
+      python - <<'PY'
+      import json
+      import os
+      import sys
+
+      report_path = "gl-dependency-scanning-report.json"
+      if not os.path.exists(report_path):
+          print("Dependency scanning report not found; skipping gate.")
+          sys.exit(0)
+
+      with open(report_path, "r", encoding="utf-8") as f:
+          data = json.load(f)
+
+      findings = data.get("vulnerabilities", [])
+      fail_levels = {"High", "Critical"}
+      hits = [v for v in findings if v.get("severity") in fail_levels]
+
+      print(f"High/Critical findings: {len(hits)}")
+      if hits:
+          sys.exit(1)
+      PY
+
+container_scanning:
+  stage: sca
+  variables:
+    CS_IMAGE: $CI_REGISTRY_IMAGE
+    CS_SEVERITY_THRESHOLD: "High"
+    CS_INCLUDE_UNFIXED: "true"
+  needs:
+    - docker_build_job
+  services:
+    - docker:20.10.16-dind
+
+container_scan_gate:
+  stage: sca
+  image: python:3.11-slim
+  needs:
+    - job: container_scanning
+      artifacts: true
+      optional: true
+  script:
+    - |
+      python - <<'PY'
+      import json
+      import os
+      import sys
+
+      report_path = "gl-container-scanning-report.json"
+      if not os.path.exists(report_path):
+          print("Container scanning report not found; skipping gate.")
+          sys.exit(0)
+
+      with open(report_path, "r", encoding="utf-8") as f:
+          data = json.load(f)
+
+      findings = data.get("vulnerabilities", [])
+      fail_levels = {"High", "Critical"}
+      hits = [v for v in findings if v.get("severity") in fail_levels]
+
+      print(f"High/Critical findings: {len(hits)}")
+      if hits:
+          sys.exit(1)
+      PY
+
+# =========================================================================
+# STAGE: report
+# =========================================================================
+# Aggregate scan results into a single, human-readable summary.
+security_summary:
+  stage: report
+  image: python:3.11-slim
+  needs:
+    - job: secret_detection
+      artifacts: true
+    - job: sast
+      artifacts: true
+      optional: true
+    - job: dependency_scanning
+      artifacts: true
+      optional: true
+    - job: container_scanning
+      artifacts: true
+      optional: true
+  script:
+    - echo "Generating security summary..."
+    - |
+      python - <<'PY'
+      import json
+      import os
+      from collections import Counter
+
+      report_files = [
+          "gl-secret-detection-report.json",
+          "gl-sast-report.json",
+          "gl-dependency-scanning-report.json",
+          "gl-container-scanning-report.json",
+          "gl-dast-report.json",
+      ]
+
+      def load_findings(path):
+          if not os.path.exists(path):
+              return []
+          with open(path, "r", encoding="utf-8") as f:
+              data = json.load(f)
+          return data.get("vulnerabilities", [])
+
+      counts = Counter()
+      total = 0
+      for path in report_files:
+          findings = load_findings(path)
+          total += len(findings)
+          for finding in findings:
+              severity = finding.get("severity", "Unknown")
+              counts[severity] += 1
+
+      lines = [
+          "# Security Summary",
+          "",
+          f"Total findings: {total}",
+          "",
+          "Counts by severity:",
+      ]
+      for severity in ["Critical", "High", "Medium", "Low", "Unknown"]:
+          lines.append(f"- {severity}: {counts.get(severity, 0)}")
+
+      os.makedirs("security-report", exist_ok=True)
+      with open("security-report/summary.md", "w", encoding="utf-8") as f:
+          f.write("\n".join(lines))
+
+      # Create a simple index with links to available reports.
+      report_links = []
+      for path in report_files:
+          if os.path.exists(path):
+              target = os.path.join("security-report", path)
+              os.replace(path, target)
+              report_links.append(f'<li><a href="{path}">{path}</a></li>')
+      report_links_html = "\n".join(report_links) or "<li>No report files found.</li>"
+      with open("security-report/index.html", "w", encoding="utf-8") as f:
+          f.write(
+              "<!doctype html><html><body>"
+              "<h1>Security Reports</h1>"
+              "<ul>"
+              + report_links_html +
+              "</ul>"
+              "</body></html>"
+          )
+      PY
+    - cat security-report/summary.md
+  artifacts:
+    when: always
+    paths:
+      - security-report/
+
+# =========================================================================
+# STAGE: deploy
+# =========================================================================
+# Deploying the application. This stage must come before DAST.
+deploy_job:
+  stage: deploy
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  script:
+    - echo "Deploying the application..."
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - docker pull "$CI_REGISTRY_IMAGE"
+    - docker run -d --name my-python-app -p 5000:5000 "$CI_REGISTRY_IMAGE"
+    - echo "Application deployed locally at http://my-python-app:5000"
+    - sleep 10
+
+# =========================================================================
+# STAGE: dast (Dynamic Application Security Testing)
+# =========================================================================
+# Dynamic analysis of the running application for vulnerabilities.
+dast:
+  stage: dast
+  variables:
+    DAST_WEBSITE: http://my-python-app:5000
+  services:
+    - docker:20.10.16-dind

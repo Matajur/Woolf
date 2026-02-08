@@ -7,7 +7,7 @@
 - Topic 5 - Practical cryptography in development
 - Topic 6 - SAST / DAST / IAST / RASP
 - Topic 7 - SCA and dependency management
-- Topic 8 - DDevSecOps and CI/CD
+- Topic 8 - DevSecOps and CI/CD
 - Topic 9 - SCM and change audit
 - Topic 10 - Software security testing
 - Topic 11 - Security in container and cloud environments
